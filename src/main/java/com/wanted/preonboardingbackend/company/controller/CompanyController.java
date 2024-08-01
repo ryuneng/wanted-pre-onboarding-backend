@@ -1,4 +1,4 @@
-package com.wanted.preonboardingbackend.controller;
+package com.wanted.preonboardingbackend.company.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
