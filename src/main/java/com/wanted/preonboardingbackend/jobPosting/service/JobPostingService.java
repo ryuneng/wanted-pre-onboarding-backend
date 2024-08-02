@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Schema(description = "채용공고 응답 DTO")
 public class JobPostingService {
 
     private final JobPostingRepository jobPostingRepository;
