@@ -46,7 +46,7 @@ public class JobPostingService {
     /**
      * 채용공고 수정
      *
-     * @param id 채용공고 ID
+     * @param id 수정할 채용공고 ID
      * @param requestDto 수정할 채용공고 정보가 포함된 JobPostingUpdateRequestDto 객체
      * @return 수정된 채용공고 정보가 포함된 JobPostingResponseDto 객체
      */
@@ -63,5 +63,19 @@ public class JobPostingService {
                         requestDto.getSkill());
 
         return new JobPostingResponseDto(jobPosting);
+    }
+
+    /**
+     * 채용공고 삭제
+     *
+     * @param id 삭제할 채용공고 ID
+     */
+    @Transactional
+    public void delete(Long id) {
+
+        JobPosting jobPosting = jobPostingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 채용공고가 없습니다."));
+
+        jobPostingRepository.delete(jobPosting);
     }
 }

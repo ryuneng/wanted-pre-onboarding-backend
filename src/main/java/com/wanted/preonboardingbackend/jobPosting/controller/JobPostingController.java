@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/job")
@@ -37,5 +39,14 @@ public class JobPostingController {
         JobPostingResponseDto responseDto = jobPostingService.update(id, requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @Operation(summary = "채용공고 삭제", description = "채용공고를 삭제합니다.")
+    @DeleteMapping("/{id}")
+    public Map<String, Long> delete(@PathVariable Long id) {
+
+        jobPostingService.delete(id);
+
+        return Map.of("SUCCESS DELETE", id);
     }
 }
