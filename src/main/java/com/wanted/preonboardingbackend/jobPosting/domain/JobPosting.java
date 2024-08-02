@@ -7,6 +7,7 @@ import lombok.*;
 @Entity
 @Table(name = "job_posting")
 @Getter
+@Setter
 @ToString
 @Builder
 @AllArgsConstructor
@@ -32,5 +33,12 @@ public class JobPosting {
 
     @Column(nullable = false)
     private String skill;
+
+    public void update(String position, int reward, String content, String skill) {
+        this.position = position;
+        this.reward = reward;
+        this.content = content;
+        this.skill = skill;
+    }
 
 }

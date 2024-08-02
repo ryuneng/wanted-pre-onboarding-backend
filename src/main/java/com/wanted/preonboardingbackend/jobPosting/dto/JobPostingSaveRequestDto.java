@@ -12,8 +12,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "채용공고 요청 DTO")
-public class JobPostingRequestDto {
+@Schema(description = "채용공고 등록 요청 DTO")
+public class JobPostingSaveRequestDto {
 
     @NotNull(message = "회사 ID는 Null이 될 수 없습니다.")
     @Schema(description = "회사 ID", example = "1")

@@ -15,8 +15,8 @@ public class JobPostingResponseDto {
     @Schema(description = "채용공고 ID", example = "1")
     private Long id;
 
-    @Schema(description = "회사 ID", example = "1")
-    private Long companyId;
+    @Schema(description = "회사명", example = "원티드랩")
+    private String companyName;
 
     @Schema(description = "채용 포지션", example = "백엔드 주니어 개발자")
     private String position;
@@ -32,7 +32,7 @@ public class JobPostingResponseDto {
 
     public JobPostingResponseDto(JobPosting jobPosting) {
         this.id = jobPosting.getId();
-        this.companyId = jobPosting.getCompany().getId();
+        this.companyName = jobPosting.getCompany().getName();
         this.position = jobPosting.getPosition();
         this.reward = jobPosting.getReward();
         this.content = jobPosting.getContent();
