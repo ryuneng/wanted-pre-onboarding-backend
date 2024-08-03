@@ -36,7 +36,7 @@ public class JobPostingService {
     public JobPostingResponseDto save(JobPostingSaveRequestDto requestDto) {
 
         Company company = companyRepository.findById(requestDto.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_COMPANY.getMessage()));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.COMPANY_NOT_FOUND.getMessage()));
 
         JobPosting jobPosting = JobPosting.builder()
                 .company(company)
@@ -62,7 +62,7 @@ public class JobPostingService {
     public JobPostingResponseDto update(Long id, JobPostingUpdateRequestDto requestDto) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_JOB.getMessage()));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.JOB_NOT_FOUND.getMessage()));
 
 
         jobPosting.update(requestDto.getPosition(),
@@ -82,7 +82,7 @@ public class JobPostingService {
     public void delete(Long id) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_JOB.getMessage()));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.JOB_NOT_FOUND.getMessage()));
 
         jobPostingRepository.delete(jobPosting);
     }
@@ -172,7 +172,7 @@ public class JobPostingService {
     public JobPostingDetailDto getJobPostingDetail(Long id) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_JOB.getMessage()));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.JOB_NOT_FOUND.getMessage()));
 
         Long companyId = jobPosting.getCompany().getId();
 

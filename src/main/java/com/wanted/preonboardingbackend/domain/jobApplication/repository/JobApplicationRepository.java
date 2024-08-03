@@ -4,4 +4,6 @@ import com.wanted.preonboardingbackend.domain.jobApplication.entity.JobApplicati
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
+
+    boolean existsByJobPostingIdAndUserId(Long jobPostingId, Long userId);
 }
