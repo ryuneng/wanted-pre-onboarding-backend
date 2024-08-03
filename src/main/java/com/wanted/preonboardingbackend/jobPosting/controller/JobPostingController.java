@@ -2,10 +2,7 @@ package com.wanted.preonboardingbackend.jobPosting.controller;
 
 import com.wanted.preonboardingbackend.dto.PageRequestDto;
 import com.wanted.preonboardingbackend.dto.PageResponseDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingListDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingSaveRequestDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingResponseDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingUpdateRequestDto;
+import com.wanted.preonboardingbackend.jobPosting.dto.*;
 import com.wanted.preonboardingbackend.jobPosting.service.JobPostingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -65,5 +62,12 @@ public class JobPostingController {
     public PageResponseDto<JobPostingListDto> searchJobPostings(PageRequestDto pageRequestDto, String keyword) {
 
         return jobPostingService.searchJobPostings(pageRequestDto, keyword);
+    }
+
+    @Operation(summary = "채용공고 상세 조회", description = "채용공고 상세 내용을 조회합니다.")
+    @GetMapping("/detail")
+    public JobPostingDetailDto getJobPostingDetail(Long id) {
+
+        return jobPostingService.getJobPostingDetail(id);
     }
 }

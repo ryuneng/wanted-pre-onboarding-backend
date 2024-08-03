@@ -6,10 +6,7 @@ import com.wanted.preonboardingbackend.dto.PageRequestDto;
 import com.wanted.preonboardingbackend.dto.PageResponseDto;
 import com.wanted.preonboardingbackend.jobPosting.domain.JobPosting;
 import com.wanted.preonboardingbackend.jobPosting.domain.JobPostingRepository;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingListDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingSaveRequestDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingResponseDto;
-import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingUpdateRequestDto;
+import com.wanted.preonboardingbackend.jobPosting.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -162,5 +159,23 @@ public class JobPostingService {
                 jobPostings.hasPrevious(),
                 jobPostings.hasNext()
         );
+    }
+
+    /**
+     * 채용공고 상세 조회
+     *
+     * @param id 조회할 채용공고 ID
+     * @return 채용내용과 해당 회사가 올린 다른 채용공고가 추가적으로 포함된 JobPostingDetailDto 객체
+     */
+    public JobPostingDetailDto getJobPostingDetail(Long id) {
+
+        JobPosting jobPosting = jobPostingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 채용공고가 없습니다."));
+
+        Long companyId = jobPosting.getCompany().getId();
+
+        List<Long> otherJobPostingIds = jobPostingRepository.findOtherJobsById(id, companyId);
+
+        return new JobPostingDetailDto(jobPosting, otherJobPostingIds);
     }
 }
