@@ -30,14 +30,14 @@ public class JobPostingController {
     public ResponseEntity<JobPostingResponseDto> save(@Valid @RequestBody JobPostingSaveRequestDto requestDto) {
 
         JobPostingResponseDto responseDto = jobPostingService.save(requestDto);
-        
+
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @Operation(summary = "채용공고 수정", description = "채용공고를 수정합니다.")
     @PutMapping("/{id}")
     public ResponseEntity<JobPostingResponseDto> update(@PathVariable Long id,
-                                                           @Valid @RequestBody JobPostingUpdateRequestDto requestDto) {
+                                                        @Valid @RequestBody JobPostingUpdateRequestDto requestDto) {
 
         JobPostingResponseDto responseDto = jobPostingService.update(id, requestDto);
 
@@ -58,5 +58,12 @@ public class JobPostingController {
     public PageResponseDto<JobPostingListDto> getJobPostings(PageRequestDto pageRequestDto) {
 
         return jobPostingService.getJobPostings(pageRequestDto);
+    }
+
+    @Operation(summary = "채용공고 검색", description = "키워드를 통해 채용공고를 검색합니다.")
+    @GetMapping("/search")
+    public PageResponseDto<JobPostingListDto> searchJobPostings(PageRequestDto pageRequestDto, String keyword) {
+
+        return jobPostingService.searchJobPostings(pageRequestDto, keyword);
     }
 }
