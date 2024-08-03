@@ -7,6 +7,7 @@ import com.wanted.preonboardingbackend.global.dto.PageRequestDto;
 import com.wanted.preonboardingbackend.global.dto.PageResponseDto;
 import com.wanted.preonboardingbackend.domain.jobPosting.entity.JobPosting;
 import com.wanted.preonboardingbackend.domain.jobPosting.repository.JobPostingRepository;
+import com.wanted.preonboardingbackend.global.enums.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +36,7 @@ public class JobPostingService {
     public JobPostingResponseDto save(JobPostingSaveRequestDto requestDto) {
 
         Company company = companyRepository.findById(requestDto.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 회사가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_COMPANY.getMessage()));
 
         JobPosting jobPosting = JobPosting.builder()
                 .company(company)
@@ -61,7 +62,7 @@ public class JobPostingService {
     public JobPostingResponseDto update(Long id, JobPostingUpdateRequestDto requestDto) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 채용공고가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_JOB.getMessage()));
 
 
         jobPosting.update(requestDto.getPosition(),
@@ -81,7 +82,7 @@ public class JobPostingService {
     public void delete(Long id) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 채용공고가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_JOB.getMessage()));
 
         jobPostingRepository.delete(jobPosting);
     }
@@ -167,10 +168,11 @@ public class JobPostingService {
      * @param id 조회할 채용공고 ID
      * @return 채용내용과 해당 회사가 올린 다른 채용공고가 추가적으로 포함된 JobPostingDetailDto 객체
      */
+    @Transactional(readOnly = true)
     public JobPostingDetailDto getJobPostingDetail(Long id) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 채용공고가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_FOUND_JOB.getMessage()));
 
         Long companyId = jobPosting.getCompany().getId();
 
