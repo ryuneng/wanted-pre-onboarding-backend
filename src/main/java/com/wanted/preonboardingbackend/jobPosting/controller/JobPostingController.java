@@ -1,5 +1,8 @@
 package com.wanted.preonboardingbackend.jobPosting.controller;
 
+import com.wanted.preonboardingbackend.dto.PageRequestDto;
+import com.wanted.preonboardingbackend.dto.PageResponseDto;
+import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingListDto;
 import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingSaveRequestDto;
 import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingResponseDto;
 import com.wanted.preonboardingbackend.jobPosting.dto.JobPostingUpdateRequestDto;
@@ -48,5 +51,12 @@ public class JobPostingController {
         jobPostingService.delete(id);
 
         return Map.of("SUCCESS DELETE", id);
+    }
+
+    @Operation(summary = "채용공고 목록 조회", description = "채용공고 전체 목록을 조회합니다.")
+    @GetMapping("/list")
+    public PageResponseDto<JobPostingListDto> getJobPostings(PageRequestDto pageRequestDto) {
+
+        return jobPostingService.getJobPostings(pageRequestDto);
     }
 }
