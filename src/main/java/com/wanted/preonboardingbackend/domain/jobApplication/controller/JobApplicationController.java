@@ -3,15 +3,14 @@ package com.wanted.preonboardingbackend.domain.jobApplication.controller;
 import com.wanted.preonboardingbackend.domain.jobApplication.dto.JobApplicationRequestDto;
 import com.wanted.preonboardingbackend.domain.jobApplication.dto.JobApplicationResponseDto;
 import com.wanted.preonboardingbackend.domain.jobApplication.service.JobApplicationService;
+import com.wanted.preonboardingbackend.global.dto.PageRequestDto;
+import com.wanted.preonboardingbackend.global.dto.PageResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +27,12 @@ public class JobApplicationController {
         JobApplicationResponseDto responseDto = jobApplicationService.save(requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "사용자의 지원내역 목록 조회", description = "특정 사용자의 지원내역 전체 목록을 조회합니다.")
+    @GetMapping("/list/{userId}")
+    public PageResponseDto<JobApplicationResponseDto> getApplications(PageRequestDto pageRequestDto, @PathVariable Long userId) {
+
+        return jobApplicationService.getApplications(pageRequestDto, userId);
     }
 }

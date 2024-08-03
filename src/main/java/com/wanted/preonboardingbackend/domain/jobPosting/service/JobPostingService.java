@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -98,7 +99,8 @@ public class JobPostingService {
 
         Pageable pageable = PageRequest.of(
                 pageRequestDto.getPage() - 1, // 페이지 번호를 1부터 시작하기 위해 -1
-                pageRequestDto.getSize());
+                pageRequestDto.getSize(),
+                Sort.by("id").descending());
 
         Page<JobPosting> jobPostings = jobPostingRepository.findAll(pageable);
 
@@ -117,7 +119,8 @@ public class JobPostingService {
 
         Pageable pageable = PageRequest.of(
                 pageRequestDto.getPage() - 1,
-                pageRequestDto.getSize());
+                pageRequestDto.getSize(),
+                Sort.by("id").descending());
 
         Page<JobPosting> jobPostings;
 

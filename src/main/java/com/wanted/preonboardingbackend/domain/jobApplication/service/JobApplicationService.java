@@ -8,10 +8,18 @@ import com.wanted.preonboardingbackend.domain.jobPosting.entity.JobPosting;
 import com.wanted.preonboardingbackend.domain.jobPosting.repository.JobPostingRepository;
 import com.wanted.preonboardingbackend.domain.user.entity.User;
 import com.wanted.preonboardingbackend.domain.user.repository.UserRepository;
+import com.wanted.preonboardingbackend.global.dto.PageRequestDto;
+import com.wanted.preonboardingbackend.global.dto.PageResponseDto;
 import com.wanted.preonboardingbackend.global.enums.ErrorMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +57,43 @@ public class JobApplicationService {
         JobApplication savedApplication = jobApplicationRepository.save(jobApplication);
 
         return new JobApplicationResponseDto(savedApplication);
+    }
+
+    /**
+     * 특정 사용자의 지원내역 목록 조회
+     *
+     * @param pageRequestDto 페이지 요청 정보가 포함된 PageRequestDto 객체
+     * @param userId 사용자 ID
+     * @return 페이징 처리가 된 해당 사용자의 지원내역 전체 목록
+     */
+    @Transactional(readOnly = true)
+    public PageResponseDto<JobApplicationResponseDto> getApplications(PageRequestDto pageRequestDto, Long userId) {
+
+        Pageable pageable = PageRequest.of(
+                pageRequestDto.getPage() - 1,
+                pageRequestDto.getSize());
+
+        Page<JobApplication> applications = jobApplicationRepository.findAllByUserId(pageable, userId);
+
+        List<JobApplicationResponseDto> dtoList = applications.stream()
+                .map(jobApplication -> new JobApplicationResponseDto(
+                        jobApplication.getId(),
+                        jobApplication.getUser().getName(),
+                        jobApplication.getJobPosting().getId(),
+                        jobApplication.getJobPosting().getCompany().getName()
+                ))
+                .collect(Collectors.toList());
+
+        return new PageResponseDto<>(
+                dtoList,
+                applications.getNumber() + 1,
+                applications.getSize(),
+                applications.getTotalElements(),
+                applications.getTotalPages(),
+                applications.isFirst(),
+                applications.isLast(),
+                applications.hasPrevious(),
+                applications.hasNext()
+        );
     }
 }
