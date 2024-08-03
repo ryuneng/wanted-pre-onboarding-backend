@@ -73,7 +73,10 @@ public class JobApplicationService {
                 pageRequestDto.getPage() - 1,
                 pageRequestDto.getSize());
 
-        Page<JobApplication> applications = jobApplicationRepository.findAllByUserId(pageable, userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.getMessage()));
+
+        Page<JobApplication> applications = jobApplicationRepository.findAllByUserId(pageable, user.getId());
 
         List<JobApplicationResponseDto> dtoList = applications.stream()
                 .map(jobApplication -> new JobApplicationResponseDto(
