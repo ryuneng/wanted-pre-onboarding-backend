@@ -16,7 +16,9 @@
 ## API 명세
 > API의 상세 내용은 <a href="https://github.com/ryuneng/wanted-pre-onboarding-backend/wiki/REST-API">🔍여기</a>를 클릭해주세요.
 
-![원티드 프리온보딩 인턴십 API 명세](https://github.com/user-attachments/assets/8ec4943a-0d4f-4dfa-a161-b7b1c93d8763)
+![원티드 프리온보딩 인턴십 API 명세](https://github.com/user-attachments/assets/ee64019e-c207-4d2b-9212-bb3ab71e3a31)
+
+
 
 <br>
 
