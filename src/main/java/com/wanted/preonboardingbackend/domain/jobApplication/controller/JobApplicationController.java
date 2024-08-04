@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/application")
-@Tag(name = "채용 지원 API", description = "채용 지원에 대한 등록, 조회 API를 제공합니다.")
+@Tag(name = "JobApplication", description = "채용 지원 API")
 public class JobApplicationController {
 
     private final JobApplicationService jobApplicationService;

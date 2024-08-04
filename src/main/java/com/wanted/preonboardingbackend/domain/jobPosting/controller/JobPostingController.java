@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/job")
-@Tag(name = "채용공고 API", description = "채용공고에 대한 등록, 수정, 삭제, 조회 API를 제공합니다.")
+@Tag(name = "JobPosting", description = "채용공고 API")
 public class JobPostingController {
 
     private final JobPostingService jobPostingService;
