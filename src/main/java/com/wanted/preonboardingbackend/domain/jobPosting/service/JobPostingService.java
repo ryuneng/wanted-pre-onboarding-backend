@@ -48,6 +48,10 @@ public class JobPostingService {
                 .skill(requestDto.getSkill())
                 .build();
 
+        if (jobPosting.getReward() < 0) {
+            throw new IllegalArgumentException(ErrorMessage.REWARD_NEGATIVE_ERROR.getMessage());
+        }
+
         JobPosting savedJob = jobPostingRepository.save(jobPosting);
 
         return new JobPostingResponseDto(savedJob);

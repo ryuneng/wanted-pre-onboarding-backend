@@ -26,8 +26,8 @@ class JobPostingRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-    @Test
     @DisplayName("키워드로 채용공고를 조회한다.")
+    @Test
     public void findByKeyword() {
         // given
         Company company1 = companyRepository.save(createCompany("원티드랩", "한국", "서울"));
