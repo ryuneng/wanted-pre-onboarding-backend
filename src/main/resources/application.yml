@@ -1,0 +1,60 @@
+# 프로파일 분리
+# 1. 기본값 프로파일
+spring:
+  profiles:
+    default: local # (로컬로 지정)
+
+  application:
+    name: wanted-pre-onboarding-backend
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(aT9plO2GHCBUEd8/nT9FRRBlDnZvPrfZw4xjanIicM/IY2EH2S/9xayBmF+mzp+B)
+    username: ENC(cTEanjg5CN/uM9TvH6F4wA==)
+    password: ENC(kx8/nlh3MmW8K5+227WjICMHRYIRM/un)
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8080
+
+# 2. 로컬용 프로파일 (보통 배포 전 초기 개발 단계에 사용)
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true # (2.5~) Hibernate 초기화 이후 data.sql 실행
+
+  sql:
+    init:
+      mode: always
+
+# 3. 테스트 실행 전용 프로파일
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never # sql 파일은 실행하지 않도록 설정
