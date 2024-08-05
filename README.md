@@ -16,8 +16,7 @@
 ## API 명세
 > API의 상세 내용은 <a href="https://github.com/ryuneng/wanted-pre-onboarding-backend/wiki/REST-API">🔍여기</a>를 클릭해주세요.
 
-![Swagger-UI](https://github.com/user-attachments/assets/1bf86ac8-8ec0-4d0e-be88-c5cc56e39f89)
-
+![원티드 프리온보딩 인턴십 API 명세](https://github.com/user-attachments/assets/55ef37af-57fe-4b0e-94da-ed3c4949f9eb)
 
 <br>
 
