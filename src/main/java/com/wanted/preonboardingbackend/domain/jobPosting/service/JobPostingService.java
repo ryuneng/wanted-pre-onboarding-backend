@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class JobPostingService {
@@ -94,7 +95,6 @@ public class JobPostingService {
      * @param pageRequestDto 페이지 요청 정보가 포함된 PageRequestDto 객체
      * @return 페이징 처리가 된 채용공고 전체 목록
      */
-    @Transactional(readOnly = true)
     public PageResponseDto<JobPostingListDto> getJobPostings(PageRequestDto pageRequestDto) {
 
         Pageable pageable = PageRequest.of(
@@ -114,7 +114,6 @@ public class JobPostingService {
      * @param keyword 검색할 키워드
      * @return 특정 키워드를 포함하여 페이징 처리된 채용공고 목록
      */
-    @Transactional(readOnly = true)
     public PageResponseDto<JobPostingListDto> searchJobPostings(PageRequestDto pageRequestDto, String keyword) {
 
         Pageable pageable = PageRequest.of(
@@ -171,7 +170,6 @@ public class JobPostingService {
      * @param id 조회할 채용공고 ID
      * @return 채용내용과 해당 회사가 올린 다른 채용공고가 추가적으로 포함된 JobPostingDetailDto 객체
      */
-    @Transactional(readOnly = true)
     public JobPostingDetailDto getJobPostingDetail(Long id) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)

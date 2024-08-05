@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class JobApplicationService {
@@ -66,7 +67,6 @@ public class JobApplicationService {
      * @param userId 사용자 ID
      * @return 페이징 처리가 된 해당 사용자의 지원내역 전체 목록
      */
-    @Transactional(readOnly = true)
     public PageResponseDto<JobApplicationResponseDto> getApplications(PageRequestDto pageRequestDto, Long userId) {
 
         Pageable pageable = PageRequest.of(
