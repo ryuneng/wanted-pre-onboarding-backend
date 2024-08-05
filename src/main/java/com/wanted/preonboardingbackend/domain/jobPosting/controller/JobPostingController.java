@@ -26,9 +26,7 @@ public class JobPostingController {
     @PostMapping
     public ResponseEntity<JobPostingResponseDto> save(@Valid @RequestBody JobPostingSaveRequestDto requestDto) {
 
-        JobPostingResponseDto responseDto = jobPostingService.save(requestDto);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(jobPostingService.save(requestDto), HttpStatus.CREATED);
     }
 
     @Operation(summary = "채용공고 수정", description = "채용공고를 수정합니다.")
@@ -36,9 +34,7 @@ public class JobPostingController {
     public ResponseEntity<JobPostingResponseDto> update(@PathVariable Long id,
                                                         @Valid @RequestBody JobPostingUpdateRequestDto requestDto) {
 
-        JobPostingResponseDto responseDto = jobPostingService.update(id, requestDto);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(jobPostingService.update(id, requestDto), HttpStatus.OK);
     }
 
     @Operation(summary = "채용공고 삭제", description = "채용공고를 삭제합니다.")
