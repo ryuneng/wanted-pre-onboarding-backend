@@ -65,8 +65,8 @@ public class JobPostingController {
     }
 
     @Operation(summary = "채용공고 상세 조회", description = "채용공고 상세 내용을 조회합니다.")
-    @GetMapping("/detail")
-    public JobPostingDetailDto getJobPostingDetail(Long id) {
+    @GetMapping("/detail/{id}")
+    public JobPostingDetailDto getJobPostingDetail(@PathVariable Long id) {
 
         return jobPostingService.getJobPostingDetail(id);
     }
