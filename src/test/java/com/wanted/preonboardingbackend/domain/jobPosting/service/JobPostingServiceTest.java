@@ -180,6 +180,109 @@ class JobPostingServiceTest {
                 .contains("풀스택 개발자", 3000, "풀스택 개발자 채용합니다.", "Java, Vue.js");
     }
 
+    @DisplayName("채용공고를 수정할 때, 알맞는 채용 공고 ID가 전달되어야 한다.")
+    @Test
+    void updateJobPostingWithNonExistentJobPostingId() {
+        // given
+        JobPosting jobPostingToBeUpdated = createJobPosting(
+                createCompany(), "백엔드 개발자", 1500, "백엔드 개발자 채용합니다.", "Java, Spring");
+        jobPostingRepository.save(jobPostingToBeUpdated);
+
+        JobPostingUpdateRequestDto request = JobPostingUpdateRequestDto.builder()
+                .position("풀스택 개발자")
+                .reward(3000)
+                .content("풀스택 개발자 채용합니다.")
+                .skill("Java, Vue.js")
+                .build();
+
+        // when // then
+        assertThatThrownBy(() -> jobPostingService.update(-1L, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ErrorMessage.JOB_NOT_FOUND.getMessage());
+        JobPostingResponseDto jobPostingResponse = jobPostingService.update(jobPostingToBeUpdated.getId(), request);
+    }
+
+    @DisplayName("채용공고를 수정할 때, 포지션은 필수값이다.")
+    @Test
+    void updateJobPostingWithoutPosition() {
+        // given
+        JobPosting jobPostingToBeUpdated = createJobPosting(
+                createCompany(), "백엔드 개발자", 1500, "백엔드 개발자 채용합니다.", "Java, Spring");
+        jobPostingRepository.save(jobPostingToBeUpdated);
+
+        JobPostingUpdateRequestDto request = JobPostingUpdateRequestDto.builder()
+                .position(null)
+                .reward(3000)
+                .content("풀스택 개발자 채용합니다.")
+                .skill("Java, Vue.js")
+                .build();
+
+        // when // then
+        assertThatThrownBy(() -> jobPostingService.update(jobPostingToBeUpdated.getId(), request))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("채용공고를 수정할 때, 채용보상금은 0 이상의 정수만 가능하다.")
+    @Test
+    void updateJobPostingWithNegativeReward() {
+        // given
+        JobPosting jobPostingToBeUpdated = createJobPosting(
+                createCompany(), "백엔드 개발자", 1500, "백엔드 개발자 채용합니다.", "Java, Spring");
+        jobPostingRepository.save(jobPostingToBeUpdated);
+
+        JobPostingUpdateRequestDto request = JobPostingUpdateRequestDto.builder()
+                .position("풀스택 개발자")
+                .reward(-1)
+                .content("풀스택 개발자 채용합니다.")
+                .skill("Java, Vue.js")
+                .build();
+
+        // when // then
+        assertThatThrownBy(() -> jobPostingService.update(jobPostingToBeUpdated.getId(), request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ErrorMessage.REWARD_NEGATIVE_ERROR.getMessage());
+    }
+
+    @DisplayName("채용공고를 수정할 때, 채용 내용은 필수값이다.")
+    @Test
+    void updateJobPostingWithoutContent() {
+        // given
+        JobPosting jobPostingToBeUpdated = createJobPosting(
+                createCompany(), "백엔드 개발자", 1500, "백엔드 개발자 채용합니다.", "Java, Spring");
+        jobPostingRepository.save(jobPostingToBeUpdated);
+
+        JobPostingUpdateRequestDto request = JobPostingUpdateRequestDto.builder()
+                .position("풀스택 개발자")
+                .reward(3000)
+                .content(null)
+                .skill("Java, Vue.js")
+                .build();
+
+        // when // then
+        assertThatThrownBy(() -> jobPostingService.update(jobPostingToBeUpdated.getId(), request))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("채용공고를 수정할 때, 사용 기술은 필수값이다.")
+    @Test
+    void updateJobPostingWithoutSkill() {
+        // given
+        JobPosting jobPostingToBeUpdated = createJobPosting(
+                createCompany(), "백엔드 개발자", 1500, "백엔드 개발자 채용합니다.", "Java, Spring");
+        jobPostingRepository.save(jobPostingToBeUpdated);
+
+        JobPostingUpdateRequestDto request = JobPostingUpdateRequestDto.builder()
+                .position("풀스택 개발자")
+                .reward(3000)
+                .content("풀스택 개발자 채용합니다.")
+                .skill(null)
+                .build();
+
+        // when // then
+        assertThatThrownBy(() -> jobPostingService.update(jobPostingToBeUpdated.getId(), request))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
     private JobPosting createJobPosting(Company company, String position, int reward, String content, String skill) {
         return JobPosting.builder()
                 .company(company)

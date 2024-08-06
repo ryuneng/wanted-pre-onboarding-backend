@@ -48,6 +48,7 @@ public class JobPostingService {
                 .skill(requestDto.getSkill())
                 .build();
 
+        // 채용보상금은 0 이상의 정수만 가능하다.
         if (jobPosting.getReward() < 0) {
             throw new IllegalArgumentException(ErrorMessage.REWARD_NEGATIVE_ERROR.getMessage());
         }
@@ -70,6 +71,10 @@ public class JobPostingService {
         JobPosting jobPosting = jobPostingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.JOB_NOT_FOUND.getMessage()));
 
+        // 채용보상금은 0 이상의 정수만 가능하다.
+        if (requestDto.getReward() < 0) {
+            throw new IllegalArgumentException(ErrorMessage.REWARD_NEGATIVE_ERROR.getMessage());
+        }
 
         jobPosting.update(requestDto.getPosition(),
                         requestDto.getReward(),
