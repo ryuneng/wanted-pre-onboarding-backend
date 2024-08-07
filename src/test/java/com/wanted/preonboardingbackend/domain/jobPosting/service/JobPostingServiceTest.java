@@ -16,6 +16,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 
 @ActiveProfiles("test")
@@ -281,6 +283,34 @@ class JobPostingServiceTest {
         // when // then
         assertThatThrownBy(() -> jobPostingService.update(jobPostingToBeUpdated.getId(), request))
                 .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("채용공고를 삭제한다.")
+    @Test
+    void deleteJobPosting() {
+        // given
+        JobPosting jobPosting = createJobPosting(
+                createCompany(), "백엔드 개발자", 1500, "백엔드 개발자 채용합니다.", "Java, Spring");
+        jobPostingRepository.save(jobPosting);
+
+        // when
+        jobPostingService.delete(jobPosting.getId());
+
+        // then
+        Optional<JobPosting> deletedJobPosting = jobPostingRepository.findById(jobPosting.getId());
+        assertThat(deletedJobPosting).isEmpty();
+    }
+
+    @DisplayName("존재하지 않는 채용공고를 삭제한다.")
+    @Test
+    void deleteJobPostingWithNonExistentJobPostingId() {
+        // given
+        Long nonExistentJobPostingID = 100L;
+
+        // when // then
+        assertThatThrownBy(() -> jobPostingService.delete(nonExistentJobPostingID))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ErrorMessage.JOB_NOT_FOUND.getMessage());
     }
 
     private JobPosting createJobPosting(Company company, String position, int reward, String content, String skill) {
