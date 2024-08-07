@@ -11,13 +11,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 @ActiveProfiles("test")
 @SpringBootTest
-public class JobApplicationRepositoryTest {
+class JobApplicationRepositoryTest {
 
     @Autowired
     private JobApplicationRepository jobApplicationRepository;
@@ -35,7 +40,7 @@ public class JobApplicationRepositoryTest {
     @Test
     void existsByJobPostingIdAndUserId() {
         // given
-        JobApplication jobApplication = createJobApplication();
+        JobApplication jobApplication = createJobApplication(createUser());
         jobApplicationRepository.save(jobApplication);
 
         // when
@@ -48,10 +53,34 @@ public class JobApplicationRepositoryTest {
         assertThat(duplicatedJobApplication).isTrue();
     }
 
-    private JobApplication createJobApplication() {
+    @DisplayName("사용자의 ID로 지원내역 목록을 조회한다.")
+    @Test
+    void findAllByUserId() {
+        // given
+        User user = createUser();
+        JobApplication application1 = createJobApplication(user);
+        JobApplication application2 = createJobApplication(user);
+        jobApplicationRepository.save(application1);
+        jobApplicationRepository.save(application2);
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("id")));
+
+        // when
+        Page<JobApplication> jobApplications = jobApplicationRepository.findAllByUserId(pageable, user.getId());
+
+        // then
+        assertThat(jobApplications).hasSize(2)
+                .extracting("id", "jobPosting.id", "user.name")
+                .containsExactlyInAnyOrder(
+                        tuple(application1.getId(), application1.getJobPosting().getId(), application1.getUser().getName()),
+                        tuple(application2.getId(), application2.getJobPosting().getId(), application2.getUser().getName())
+                );
+    }
+
+    private JobApplication createJobApplication(User user) {
         return JobApplication.builder()
                 .jobPosting(createJobPosting())
-                .user(createUser())
+                .user(user)
                 .build();
     }
 
